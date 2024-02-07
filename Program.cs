@@ -62,6 +62,22 @@ app.MapPost("/api/timesheets", (TimesheetEntry newEntry) =>
 .WithName("AddTimesheet")
 .WithOpenApi();
 
+app.MapPut("/api/timesheets/{id}", (int id, TimesheetEntry updatedEntry) =>
+{
+    TimesheetsController controller = new();
+    return controller.UpdateTimesheet(id, updatedEntry);
+})
+.WithName("UpdateTimesheet")
+.WithOpenApi();
+
+app.MapDelete("/api/timesheets/{id}", (int id) =>
+{
+    TimesheetsController controller = new();
+    return controller.DeleteTimesheet(id);
+})
+.WithName("DeleteTimesheet")
+.WithOpenApi();
+
 
 
 

@@ -48,6 +48,14 @@ namespace TimesheetApi.Controllers
         {
             try
             {
+                 // Validate date format
+                if (!DateTime.TryParse(newEntry.Date.ToString(), out _))
+                    return BadRequest("Invalid date format. Please use yyyy-MM-dd.");
+
+                // Validate non-negative hours
+                if (newEntry.HoursWorked < 0)
+                    return BadRequest("Hours worked must be non-negative.");
+
                 var timesheets = ReadTimesheetsFromCsv();
                 newEntry.Id = timesheets.Max(t => t.Id) + 1; // Assign a new ID
                 timesheets.Add(newEntry);
@@ -66,8 +74,16 @@ namespace TimesheetApi.Controllers
         {
             try
             {
+                // Validate date format
+                if (!DateTime.TryParse(updatedEntry.Date.ToString(), out _))
+                    return BadRequest("Invalid date format. Please use yyyy-MM-dd.");
+
+                // Validate non-negative hours
+                if (updatedEntry.HoursWorked < 0)
+                    return BadRequest("Hours worked must be non-negative.");
+                    
                 var timesheets = ReadTimesheetsFromCsv();
-                var existingEntry = timesheets.FirstOrDefault(t => t.Id == id);
+                var existingEntry = timesheets.FirstOrDefault(t => t.EmployeeId == id);
                 if (existingEntry == null)
                     return NotFound($"Timesheet with ID {id} not found.");
 
@@ -89,7 +105,7 @@ namespace TimesheetApi.Controllers
             try
             {
                 var timesheets = ReadTimesheetsFromCsv();
-                var existingEntry = timesheets.FirstOrDefault(t => t.Id == id);
+                var existingEntry = timesheets.FirstOrDefault(t => t.EmployeeId == id);
                 if (existingEntry == null)
                     return NotFound($"Timesheet with ID {id} not found.");
 
