@@ -1,6 +1,14 @@
+using System.Security.Authentication;
 using TimesheetApi.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
+/*builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ConfigureHttpsDefaults(listenOptions =>
+    {
+        listenOptions.SslProtocols = SslProtocols.Tls12;
+    });
+});*/
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -8,6 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -80,6 +89,7 @@ app.MapDelete("/api/timesheets/{id}", (int id) =>
 
 
 
+//app.UseMiddleware<ApiKeyAuthenticationMiddleware>();
 
 app.Run();
 
